@@ -32,7 +32,7 @@ class DataBaseSQLite {
         await db.execute(scripts[i]!);
         debugPrint(scripts[i]);
       }
-    }, onUpgrade: (Database db, int oldVersion, int NewVersion) async {
+    }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
       for (var i = oldVersion + 1; i <= scripts.length; i++) {
         await db.execute(scripts[i]!);
         debugPrint(scripts[i]);

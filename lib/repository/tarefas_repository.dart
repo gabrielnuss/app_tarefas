@@ -20,5 +20,26 @@ class TarefaRepository {
     return tarefas;
   }
 
-  void delete(TarefasModel tarefa) {}
+  void delete(TarefasModel tarefa) async {
+    var db = await DataBaseSQLite().getDataBase();
+    await db.rawDelete("DELETE FROM tarefas WHERE id = ?", [tarefa.id]);
+  }
+
+  void update(TarefasModel tarefa) async {
+    var db = await DataBaseSQLite().getDataBase();
+    await db.rawUpdate("UPDATE FROM tarefas WHERE id = ?", [tarefa.id]);
+  }
+
+  void insert(TarefasModel tarefa) async {
+    var db = await DataBaseSQLite().getDataBase();
+    await db.rawInsert(
+        "INSERT INTO tarefas (id, descricao, horario, data, concluido) values(?,?,?,?,?)",
+        [
+          tarefa.id,
+          tarefa.descricao,
+          tarefa.horario,
+          tarefa.data.toString(),
+          tarefa.concluido
+        ]);
+  }
 }

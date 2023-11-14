@@ -21,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).secondaryHeaderColor,
-          title: Text("Tarefas"),
+          title: const Text("Tarefas"),
         ),
         body: ListView.builder(
           itemCount: tarefas.length,
@@ -60,9 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ListTile(
                         title: Text(
                       tarefa.descricao,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     )),
-                    Divider()
+                    const Divider()
                   ],
                 ));
           },
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: ((context) => CadastrarTarefaPage())));
+                    builder: ((context) => const CadastrarTarefaPage())));
           },
           tooltip: 'Adicionar tarefa',
           child: const Icon(Icons.add),
