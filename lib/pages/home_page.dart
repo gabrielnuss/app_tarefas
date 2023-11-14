@@ -10,7 +10,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<TarefasModel> tarefas = [
-    TarefasModel(1, "Tarefa teste", "10:0", DateTime.now())
+    TarefasModel(1, "Tarefa teste", "10:00", DateTime.now())
   ];
 
   @override
