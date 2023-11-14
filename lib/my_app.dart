@@ -9,8 +9,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tarefas',
       theme: ThemeData(
-          primaryColor: Colors.purple[50],
-          secondaryHeaderColor: Colors.purple[300]),
+          primaryColor: Colors.grey[700],
+          secondaryHeaderColor: Colors.deepPurple[700]),
       home: const MyHomePage(),
     );
   }
