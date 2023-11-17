@@ -8,6 +8,9 @@ class TarefasModel {
   TarefasModel(
       this._id, this._descricao, this._horario, this._data, this._concluido);
 
+  TarefasModel.semId(
+      this._descricao, this._horario, this._data, this._concluido);
+
   int get id => _id;
   String get descricao => _descricao;
   String get horario => _horario;
