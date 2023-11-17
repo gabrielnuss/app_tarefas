@@ -57,7 +57,6 @@ class HomePageState extends State<HomePage> {
                 shadowColor: Theme.of(context).secondaryHeaderColor,
                 color: Theme.of(context).primaryColor,
                 child: Dismissible(
-                    movementDuration: Duration(milliseconds: 200),
                     secondaryBackground: Container(
                         color: Colors.red,
                         child: const Padding(
@@ -88,46 +87,54 @@ class HomePageState extends State<HomePage> {
                         )),
                     onDismissed: (DismissDirection direction) async {
                       if (direction == DismissDirection.startToEnd) {
+                        tarefas.remove(tarefa);
                         tarefa.setConcluido(true);
                         await tarefaRepository.update(tarefa);
                         await pontosRepository.somarPonto();
                         deletarNotificacao(tarefa);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor:
+                                Theme.of(context).secondaryHeaderColor,
                             content: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Parabéns! Você ganhou mais 10 pontos!  "),
-                            Icon(
-                              Icons.monetization_on,
-                              color: Colors.yellow,
-                            )
-                          ],
-                        )));
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Parabéns! Você ganhou mais 10 moedas!  "),
+                                Icon(
+                                  Icons.monetization_on,
+                                  color: Colors.yellow,
+                                )
+                              ],
+                            )));
                       } else {
+                        tarefas.remove(tarefa);
                         await tarefaRepository.delete(tarefa);
                         deletarNotificacao(tarefa);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor:
+                                Theme.of(context).secondaryHeaderColor,
                             content: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text("Tarefa Excluída"),
-                            Expanded(child: Container()),
-                            TextButton(
-                                onPressed: () async {
-                                  await tarefaRepository.insert(tarefa);
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  obterLista();
-                                  setState(() {});
-                                },
-                                child: Text(
-                                  "Desfazer",
-                                  style: TextStyle(color: Colors.blue),
-                                ))
-                          ],
-                        )));
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text("Tarefa Excluída"),
+                                Expanded(child: Container()),
+                                TextButton(
+                                    onPressed: () async {
+                                      await tarefaRepository.insert(tarefa);
+                                      ScaffoldMessenger.of(context)
+                                          .hideCurrentSnackBar();
+                                      obterLista();
+                                      setState(() {});
+                                    },
+                                    child: Text(
+                                      "Desfazer",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          decoration: TextDecoration.underline),
+                                    ))
+                              ],
+                            )));
                       }
                       obterLista();
                       setState(() {});
@@ -144,7 +151,7 @@ class HomePageState extends State<HomePage> {
                       subtitle: Row(
                         children: [
                           Expanded(
-                            flex: 2,
+                            flex: 4,
                             child: Text(
                               "${tarefa.data.day}/${tarefa.data.month}/${tarefa.data.year}",
                               style: TextStyle(color: Colors.white),
