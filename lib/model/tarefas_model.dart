@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class TarefasModel {
   int _id = 0;
   String _descricao = "";
-  String _horario = "";
+  TimeOfDay _horario = TimeOfDay.now();
   DateTime _data = DateTime.now();
   bool _concluido = false;
 
@@ -13,7 +15,7 @@ class TarefasModel {
 
   int get id => _id;
   String get descricao => _descricao;
-  String get horario => _horario;
+  TimeOfDay get horario => _horario;
   DateTime get data => _data;
   bool get concluido => _concluido;
 
@@ -21,7 +23,7 @@ class TarefasModel {
     _descricao = descricao;
   }
 
-  void setHorario(String horario) {
+  void setHorario(TimeOfDay horario) {
     _horario = horario;
   }
 

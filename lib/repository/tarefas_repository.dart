@@ -1,5 +1,6 @@
 import 'package:app_tarefas/model/tarefas_model.dart';
 import 'package:app_tarefas/repository/database.dart';
+import 'package:flutter/material.dart';
 
 class TarefaRepository {
   Future<List<TarefasModel>> selectAll(bool concluido) async {
@@ -13,7 +14,9 @@ class TarefaRepository {
       tarefas.add(TarefasModel(
           int.parse(element["id"].toString()),
           element["descricao"].toString(),
-          element["horario"].toString(),
+          TimeOfDay(
+              hour: int.parse(element["horario"].toString().substring(0, 2)),
+              minute: int.parse(element["horario"].toString().substring(3, 5))),
           DateTime.parse(element["data"].toString()),
           element["concluido"] == 1));
     }
@@ -25,26 +28,26 @@ class TarefaRepository {
     await db.rawDelete("DELETE FROM tarefas WHERE id = ?", [tarefa.id]);
   }
 
-  Future<void> update(TarefasModel tarefa) async {
+  Future<void> update(TarefasModel tarefa, BuildContext context) async {
     var db = await DataBaseSQLite().getDataBase();
     await db.rawUpdate(
         "UPDATE tarefas SET descricao = ?, horario = ?, data = ?, concluido = ? WHERE id = ?",
         [
           tarefa.descricao,
-          tarefa.horario,
+          tarefa.horario.format(context),
           tarefa.data.toString(),
           tarefa.concluido,
           tarefa.id
         ]);
   }
 
-  Future<int> insert(TarefasModel tarefa) async {
+  Future<int> insert(TarefasModel tarefa, BuildContext context) async {
     var db = await DataBaseSQLite().getDataBase();
     await db.rawInsert(
         "INSERT INTO tarefas (descricao, horario, data, concluido) values(?,?,?,?)",
         [
           tarefa.descricao,
-          tarefa.horario,
+          tarefa.horario.format(context),
           tarefa.data.toString(),
           tarefa.concluido
         ]);
