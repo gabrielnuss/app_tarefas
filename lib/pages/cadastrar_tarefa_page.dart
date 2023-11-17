@@ -46,17 +46,39 @@ class _TaskScreenState extends State<TaskScreen> {
   late TarefaRepository tarefaRepository = TarefaRepository();
 
   _addTask() async {
-    var tarefa = TarefasModel.semId(_descriptionController.text,
-        _selectedTime.format(context), _selectedDate, false);
+    DateTime DiaHorario = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _selectedTime.hour,
+      _selectedTime.minute,
+      20,
+    );
+    TarefasModel tarefa;
 
-    var id = await tarefaRepository.insert(tarefa);
+    if (DiaHorario.isBefore(DateTime.now()) ||
+        DiaHorario.isAtSameMomentAs(DateTime.now())) {
+      tarefa = TarefasModel.semId(
+          _descriptionController.text,
+          TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute),
+          DateTime.now().add(Duration(minutes: 1)),
+          false);
+    } else {
+      tarefa = TarefasModel.semId(
+          _descriptionController.text,
+          TimeOfDay(hour: DiaHorario.hour, minute: DiaHorario.minute),
+          DiaHorario,
+          false);
+    }
+
+    var id = await tarefaRepository.insert(tarefa, context);
     Provider.of<NotificationService>(context, listen: false).showNotification(
         CustomNotification(
             id: id,
             title: tarefa.descricao,
             body: "Você tem uma tarefa para agora",
             payload: '/home'),
-        tarefa.data.add(Duration(minutes: 1)));
+        tarefa.data);
     // Limpar os controladores após adicionar uma tarefa
     _taskController.clear();
     _descriptionController.clear();

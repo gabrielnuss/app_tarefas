@@ -20,6 +20,9 @@ class HomePageState extends State<HomePage> {
   List<TarefasModel> tarefas = [];
   TarefaRepository tarefaRepository = TarefaRepository();
   PontosRepository pontosRepository = PontosRepository();
+  final pontuacaoBaixa = 5;
+  final pontuacaoNormal = 10;
+  var pontuacao;
 
   @override
   void initState() {
@@ -89,18 +92,26 @@ class HomePageState extends State<HomePage> {
                       if (direction == DismissDirection.startToEnd) {
                         tarefas.remove(tarefa);
                         tarefa.setConcluido(true);
-                        await tarefaRepository.update(tarefa);
-                        await pontosRepository.somarPonto();
+                        await tarefaRepository.update(tarefa, context);
+                        if (DateTime.now().isBefore(tarefa.data) ||
+                            DateTime.now().isAtSameMomentAs(tarefa.data)) {
+                          pontuacao = pontuacaoNormal;
+                          await pontosRepository.somarPonto(pontuacaoNormal);
+                        } else {
+                          pontuacao = pontuacaoBaixa;
+                          await pontosRepository.somarPonto(pontuacaoBaixa);
+                        }
                         deletarNotificacao(tarefa);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor:
                                 Theme.of(context).secondaryHeaderColor,
-                            content: const Row(
+                            content: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Parabéns! Você ganhou mais 10 moedas!  "),
-                                Icon(
+                                Text(
+                                    "Parabéns! Você ganhou mais $pontuacao moedas!  "),
+                                const Icon(
                                   Icons.monetization_on,
                                   color: Colors.yellow,
                                 )
@@ -121,7 +132,8 @@ class HomePageState extends State<HomePage> {
                                 Expanded(child: Container()),
                                 TextButton(
                                     onPressed: () async {
-                                      await tarefaRepository.insert(tarefa);
+                                      await tarefaRepository.insert(
+                                          tarefa, context);
                                       ScaffoldMessenger.of(context)
                                           .hideCurrentSnackBar();
                                       obterLista();
@@ -159,7 +171,7 @@ class HomePageState extends State<HomePage> {
                           ),
                           Expanded(
                             child: Text(
-                              tarefa.horario,
+                              tarefa.horario.format(context),
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
