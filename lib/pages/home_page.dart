@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:app_tarefas/model/tarefas_model.dart';
 import 'package:app_tarefas/notification/notifications_service.dart';
 import 'package:app_tarefas/pages/cadastrar_tarefa_page.dart';
+import 'package:app_tarefas/repository/pontos_repository.dart';
 import 'package:app_tarefas/repository/tarefas_repository.dart';
+import 'package:app_tarefas/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +19,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   List<TarefasModel> tarefas = [];
   TarefaRepository tarefaRepository = TarefaRepository();
+  PontosRepository pontosRepository = PontosRepository();
 
   @override
   void initState() {
@@ -52,6 +57,7 @@ class HomePageState extends State<HomePage> {
                 shadowColor: Theme.of(context).secondaryHeaderColor,
                 color: Theme.of(context).primaryColor,
                 child: Dismissible(
+                    movementDuration: Duration(milliseconds: 200),
                     secondaryBackground: Container(
                         color: Colors.red,
                         child: const Padding(
@@ -84,9 +90,11 @@ class HomePageState extends State<HomePage> {
                       if (direction == DismissDirection.startToEnd) {
                         tarefa.setConcluido(true);
                         await tarefaRepository.update(tarefa);
+                        await pontosRepository.somarPonto();
+                        deletarNotificacao(tarefa);
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Row(
+                            content: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("Parabéns! Você ganhou mais 10 pontos!  "),
@@ -166,6 +174,7 @@ class HomePageState extends State<HomePage> {
           child: const Icon(Icons.add),
           backgroundColor: Theme.of(context).secondaryHeaderColor,
         ),
+        drawer: CustomDrawer(),
       ),
     );
   }

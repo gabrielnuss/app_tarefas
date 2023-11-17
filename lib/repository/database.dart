@@ -9,6 +9,9 @@ Map<int, String> scripts = {
          horario TEXT,
          data DATETIME,
          concluido INTEGER
+  );''',
+  2: ''' CREATE TABLE pontos (
+        ponto INTEGER
   );'''
 };
 
