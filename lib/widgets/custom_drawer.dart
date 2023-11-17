@@ -30,6 +30,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(child: Center(child: Text(quantidadePontos.toString())));
+    return SafeArea(
+      child: Drawer(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    quantidadePontos.toString(),
+                    style: TextStyle(fontSize: 40, color: Colors.white),
+                  ),
+                  Icon(
+                    Icons.monetization_on,
+                    color: Colors.yellow,
+                    size: 40,
+                  )
+                ],
+              ),
+              Text(
+                "Moedas acumuladas",
+                style: TextStyle(color: Colors.white, fontSize: 15),
+              )
+            ],
+          )),
+    );
   }
 }
